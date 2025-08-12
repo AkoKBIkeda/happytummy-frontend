@@ -17,7 +17,7 @@ export default function CategoryButtons({ categories, selectedCategory, onSelect
           <button
             key={cat.id}
             onClick={() => onSelect(cat)}
-            className={`w-56 p-5 rounded font-semibold text-black transition ${
+            className={`w-56 p-5 rounded-lg font-semibold text-black transition ${
               selectedCategory === cat.id
                 ? 'bg-[#7A96D7] text-lg'
                 : 'bg-[#90A9EB] text-lg hover:bg-[#BAC6F9]'
