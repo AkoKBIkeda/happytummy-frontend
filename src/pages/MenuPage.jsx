@@ -179,15 +179,4 @@ const categoryLabel = categoryObj ? categoryObj.label : category;
       </div>}
     </div>
    );
-
-
-//   const menuItems = Array.from({ length: 30 }, (_, i) => `Menu ${i + 1} (${category})`);
-
-//   return (
-//     <div className="p-10 space-y-4 max-w-full justify-center">
-//       <Header/>
-//       <h1 className="text-2xl text-[#5679C7] font-semibold mb-4">{category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()} Menu — {month} {year}</h1>
-//       <MenuCalendar menuItems={menuItems} />
-//     </div>
-//   );
 }
