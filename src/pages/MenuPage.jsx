@@ -155,19 +155,19 @@ return (
         {/* Buttons */}
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
           <button
-            className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-full sm:w-40"
+            className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] font-semibold text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-full sm:w-40"
             type="button"
           >
             Download <Download size={18} className="ml-3" />
           </button>
           <button
-            className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-full sm:w-40"
+            className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] font-semibold text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-full sm:w-40"
             type="button"
           >
             Approve All <CheckSquare size={18} className="ml-3" />
           </button>
           <button
-            className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-full sm:w-40"
+            className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] font-semibold text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-full sm:w-40"
             type="button"
           >
             Change All <Shuffle size={18} className="ml-3" />
