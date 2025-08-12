@@ -5,11 +5,19 @@ import MenuDetails from '../components/MenuDetails';
 import Header from '../components/Header';
 import {Download, CheckSquare, Shuffle} from 'lucide-react';
 
+const categories = [
+  { id: 'standard', label: 'Standard' },
+  { id: 'vege', label: 'Vegetarian' },
+  { id: 'vegan', label: 'Vegan' },
+  { id: 'gf', label: 'Gluten Free' },
+  { id: 'halal', label: 'No Pork & Halal' },
+];
+
 const mockMenuData = {
-  startDay: 3,
+  startDay: 5, // 0=Su, 1=Mo, 2=Tu, 3=We, 4=Th, 5=Fr, 6=Sa
   daysInMonth: 31,
   menuItems: [
-    { date: "2025-08-03", mealId: "1", menuName: "Chicken Curry" },
+    { date: "2025-08-01", mealId: "1", menuName: "Chicken Curry" },
     { date: "2025-08-04", mealId: "2", menuName: "Veggie Pasta" },
     { date: "2025-08-05", mealId: "3", menuName: "Beef Stew" },
     { date: "2025-08-06", mealId: "4", menuName: "Grilled Fish" },
@@ -114,7 +122,6 @@ export default function MenuPage() {
     setSelectedMenuDetails(null);
   };
 
-
   if (loading) return <div>Loading menu...</div>;
   if (!menuData) return <div>No menu data available.</div>;
 
@@ -128,26 +135,29 @@ export default function MenuPage() {
 
 const { month, year } = getMonthYearFromMenuItems(menuData.menuItems);
 
+const categoryObj = categories.find(c => c.id === category);
+const categoryLabel = categoryObj ? categoryObj.label : category;
+
   return(
     <div className="p-10 space-y-4 max-w-full justify-center">
         <Header/>
         <div className="flex items-center justify-between mb-4">
             <h1 className="text-2xl text-[#5679C7] font-semibold mb-4 pl-10">
-                {category.charAt(0).toUpperCase() + category.slice(1).     toLowerCase()} Menu &nbsp;&nbsp;<span className="text-black">{month} {year}</span>
+                {categoryLabel} Menu&nbsp;&nbsp;<span className="text-black">{month} {year}</span>
             </h1>
             <div className="flex gap-4">
                 <button
-                    className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-40"
+                    className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-40"
                     type="button">
                     Download <Download size={18} className="ml-3" />
                 </button>
                 <button
-                    className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-40"
+                    className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-40"
                     type="button">
                     Approve All <CheckSquare size={18} className="ml-3" />
                 </button>
                 <button
-                    className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-40"
+                    className="flex items-center justify-center px-4 py-2 bg-[#e1e9fd] text-black rounded-2xl hover:bg-white hover:border-2 hover:border-[#e1e9fd] transition cursor-pointer w-40"
                     type="button">
                     Change All <Shuffle size={18} className="ml-3" />
                 </button>
@@ -155,8 +165,10 @@ const { month, year } = getMonthYearFromMenuItems(menuData.menuItems);
         </div>
         
         <MenuCalendar 
-            category={category} 
-            menuItems={menuData.menuItems} 
+            category={category}
+            menuItems={menuData.menuItems}
+            startDay={menuData.startDay}
+            daysInMonth={menuData.daysInMonth}
             onMenuItemClick={handleMenuItemClick} />
         {/* Show details popup if menu is selected */}
         {selectedMenuDetails && (
