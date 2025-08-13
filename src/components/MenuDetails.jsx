@@ -19,6 +19,12 @@ export default function MenuDetails({ menu, onClose }) {
         {/* Menu Name */}
         <h3 className="text-xl font-bold mb-4">{menu.name}</h3>
 
+        {/* Menu Description */}
+         <div className="mb-4">
+            <h4 className="font-semibold mb-1">Description</h4>
+            <p className="text-sm text-gray-700 leading-relaxed">{menu.description}</p>
+        </div>
+        
         {/* Ingredients */}
         {menu.ingredients && menu.ingredients.length > 0 && (
         <div className="mb-4">

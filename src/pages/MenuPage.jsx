@@ -29,36 +29,38 @@ const mockMenuData = {
 const mockMenuDetailsById = {
   1: {
     name: "Chicken Curry",
+    description: "A spicy and flavorful chicken curry with coconut milk.",
     ingredients: ["Chicken", "Curry Powder", "Coconut Milk", "Onions", "Garlic"],
     nutrition: { calories: "500 kcal", protein: "35g", fat: "20g", carbs: "40g" },
     allergens: ["None"],
   },
   2: {
     name: "Veggie Pasta",
+    description: "A delicious pasta dish loaded with fresh vegetables.",
     ingredients: ["Pasta", "Tomatoes", "Zucchini", "Basil", "Olive Oil"],
     nutrition: { calories: "400 kcal", protein: "15g", fat: "10g", carbs: "60g" },
     allergens: ["Gluten"],
   },
   3: {
     name: "Beef Stew",
-    // change later
-    ingredients: ["Chicken", "Curry Powder", "Coconut Milk", "Onions", "Garlic"],
-    nutrition: { calories: "500 kcal", protein: "35g", fat: "20g", carbs: "40g" },
+    description: "A hearty beef stew with root vegetables and herbs.",
+    ingredients: ["Beef", "Carrots", "Potatoes", "Onions", "Herbs"],
+    nutrition: { calories: "600 kcal", protein: "40g", fat: "25g", carbs: "50g" },
     allergens: ["None"],
   },
   4: {
     name: "Grilled Fish",
-    // change later
-    ingredients: ["Pasta", "Tomatoes", "Zucchini", "Basil", "Olive Oil"],
-    nutrition: { calories: "400 kcal", protein: "15g", fat: "10g", carbs: "60g" },
-    allergens: ["Gluten"],
+    description: "A light and zesty grilled fish dish with herbs.",
+    ingredients: ["Fish", "Lemon", "Garlic", "Herbs"],
+    nutrition: { calories: "350 kcal", protein: "30g", fat: "15g", carbs: "10g" },
+    allergens: ["Fish"],
   },
   5: {
     name: "Quinoa Salad",
-    // change later
-    ingredients: ["Chicken", "Curry Powder", "Coconut Milk", "Onions", "Garlic"],
-    nutrition: { calories: "500 kcal", protein: "35g", fat: "20g", carbs: "40g" },
-    allergens: ["None"],
+    description: "A refreshing quinoa salad with cucumbers, tomatoes, and feta cheese.",
+    ingredients: ["Quinoa", "Cucumber", "Tomatoes", "Feta Cheese", "Olive Oil"],
+    nutrition: { calories: "300 kcal", protein: "10g", fat: "15g", carbs: "30g" },
+    allergens: ["Dairy"],
   },
 };
 
@@ -70,31 +72,6 @@ export default function MenuPage() {
     const [selectedMenuDetails, setSelectedMenuDetails] = useState(null);
     const [loadingDetails, setLoadingDetails] = useState(false);
 
-// when integrated with backend...
-
-//     useEffect(() => {
-//     async function fetchMenu() {
-//       setLoading(true);
-//       setError(null);
-//       try {
-//         const res = await fetch(`/api/menu?category=${category}`);
-//         if (!res.ok) throw new Error(`Error fetching menu: ${res.statusText}`);
-//         const data = await res.json();
-//         setMenuData(data);
-//       } catch (err) {
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     }
-//     fetchMenu();
-//   }, [category]);
-
-//   if (loading) return <div>Loading menu...</div>;
-//   if (error) return <div className="text-red-600">Error: {error}</div>;
-//   if (!menuData) return <div>No menu data available.</div>;
-
-//   return <MenuCalendar category={category} menuData={menuData} />;
 
 // while not connected to the backend
   useEffect(() => {
