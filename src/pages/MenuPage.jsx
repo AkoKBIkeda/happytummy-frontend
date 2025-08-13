@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import { useParams } from 'react-router-dom';
 import MenuCalendar from '../components/MenuCalendar';
 import MenuDetails from '../components/MenuDetails';
 import Header from '../components/Header';
-import {Download, CheckSquare, Shuffle} from 'lucide-react';
+import { Download, CheckSquare, Shuffle } from 'lucide-react';
+import { baseUrl } from "../constants";
 
 const categories = [
   { id: 'standard', label: 'Standard' },
@@ -13,132 +15,81 @@ const categories = [
   { id: 'halal', label: 'No Pork & Halal' },
 ];
 
-const mockMenuData = {
-  startDay: 5, // 0=Su, 1=Mo, 2=Tu, 3=We, 4=Th, 5=Fr, 6=Sa
-  daysInMonth: 31,
-  menuItems: [
-    { date: "2025-08-01", mealId: "1", menuName: "Chicken Curry" },
-    { date: "2025-08-04", mealId: "2", menuName: "Veggie Pasta" },
-    { date: "2025-08-05", mealId: "3", menuName: "Beef Stew" },
-    { date: "2025-08-06", mealId: "4", menuName: "Grilled Fish" },
-    { date: "2025-08-07", mealId: "5", menuName: "Quinoa Salad" },
-  ],
-};
-
-// Mock detailed menu data keyed by mealId
-const mockMenuDetailsById = {
-  1: {
-    name: "Chicken Curry",
-    ingredients: ["Chicken", "Curry Powder", "Coconut Milk", "Onions", "Garlic"],
-    nutrition: { calories: "500 kcal", protein: "35g", fat: "20g", carbs: "40g" },
-    allergens: ["None"],
-  },
-  2: {
-    name: "Veggie Pasta",
-    ingredients: ["Pasta", "Tomatoes", "Zucchini", "Basil", "Olive Oil"],
-    nutrition: { calories: "400 kcal", protein: "15g", fat: "10g", carbs: "60g" },
-    allergens: ["Gluten"],
-  },
-  3: {
-    name: "Beef Stew",
-    // change later
-    ingredients: ["Chicken", "Curry Powder", "Coconut Milk", "Onions", "Garlic"],
-    nutrition: { calories: "500 kcal", protein: "35g", fat: "20g", carbs: "40g" },
-    allergens: ["None"],
-  },
-  4: {
-    name: "Grilled Fish",
-    // change later
-    ingredients: ["Pasta", "Tomatoes", "Zucchini", "Basil", "Olive Oil"],
-    nutrition: { calories: "400 kcal", protein: "15g", fat: "10g", carbs: "60g" },
-    allergens: ["Gluten"],
-  },
-  5: {
-    name: "Quinoa Salad",
-    // change later
-    ingredients: ["Chicken", "Curry Powder", "Coconut Milk", "Onions", "Garlic"],
-    nutrition: { calories: "500 kcal", protein: "35g", fat: "20g", carbs: "40g" },
-    allergens: ["None"],
-  },
+// Map frontend category id to backend dietary query label exactly as backend expects
+const dietaryMap = {
+  standard: 'Standard',
+  vege: 'Vegetarian',
+  vegan: 'Vegan',
+  gf: 'Gluten-free',  // note dash here to match backend
+  halal: 'Halal',
 };
 
 export default function MenuPage() {
-    const { category } = useParams();
-    const [menuData, setMenuData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedMenuDetails, setSelectedMenuDetails] = useState(null);
-    const [loadingDetails, setLoadingDetails] = useState(false);
+  const { category } = useParams();
+  const [menuData, setMenuData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedMenuDetails, setSelectedMenuDetails] = useState(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
-// when integrated with backend...
-
-//     useEffect(() => {
-//     async function fetchMenu() {
-//       setLoading(true);
-//       setError(null);
-//       try {
-//         const res = await fetch(`/api/menu?category=${category}`);
-//         if (!res.ok) throw new Error(`Error fetching menu: ${res.statusText}`);
-//         const data = await res.json();
-//         setMenuData(data);
-//       } catch (err) {
-//         setError(err.message);
-//       } finally {
-//         setLoading(false);
-//       }
-//     }
-//     fetchMenu();
-//   }, [category]);
-
-//   if (loading) return <div>Loading menu...</div>;
-//   if (error) return <div className="text-red-600">Error: {error}</div>;
-//   if (!menuData) return <div>No menu data available.</div>;
-
-//   return <MenuCalendar category={category} menuData={menuData} />;
-
-// while not connected to the backend
+  // Fetch monthly menu data when category changes
   useEffect(() => {
-    // Simulate API delay
-    setLoading(true);
-    setTimeout(() => {
-      setMenuData(mockMenuData);
-      setLoading(false);
-    }, 500);
+    async function fetchMenu() {
+      setLoading(true);
+      setError(null);
+      try {
+        const dietaryQuery = dietaryMap[category] || category;
+        const res = await axios.get(baseUrl + `api/monthly-menu/?dietary=${encodeURIComponent(dietaryQuery)}`);
+
+        setMenuData(res.data);
+      } catch (err) {
+        setError(err.message || 'Error fetching menu');
+        setMenuData(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchMenu();
   }, [category]);
 
-  // Handler called when user clicks on a menu item in the calendar
-  const handleMenuItemClick = (mealId) => {
+  // Fetch detailed menu item by mealId
+  const handleMenuItemClick = async (mealId) => {
     setLoadingDetails(true);
-    // Simulate fetching detailed data by mealId
-    setTimeout(() => {
-      const details = mockMenuDetailsById[mealId] || null;
-      setSelectedMenuDetails(details);
+    try {
+      const res = await axios.get(baseUrl + `api/meals/${mealId}/`);
+      setSelectedMenuDetails(res.data);
+    } catch (err) {
+      console.error(err);
+      setSelectedMenuDetails(null);
+    } finally {
       setLoadingDetails(false);
-    }, 400);
+    }
   };
 
-   // Close details popup
+  // Close menu details popup
   const handleCloseDetails = () => {
     setSelectedMenuDetails(null);
   };
 
   if (loading) return <div>Loading menu...</div>;
+  if (error) return <div className="text-red-600">Error: {error}</div>;
   if (!menuData) return <div>No menu data available.</div>;
 
+  // Extract month and year from first menu item
   function getMonthYearFromMenuItems(menuItems) {
-  if (!menuItems || menuItems.length === 0) return { month: '', year: '' };
-  const firstDate = new Date(menuItems[0].date);
-  const month = firstDate.toLocaleString('default', { month: 'long' });
-  const year = firstDate.getFullYear();
-  return { month, year };
-}
+    if (!menuItems || menuItems.length === 0) return { month: '', year: '' };
+    const firstDate = new Date(menuItems[0].date);
+    const month = firstDate.toLocaleString('default', { month: 'long' });
+    const year = firstDate.getFullYear();
+    return { month, year };
+  }
 
-const { month, year } = getMonthYearFromMenuItems(menuData.menuItems);
+  const { month, year } = getMonthYearFromMenuItems(menuData.menuItems);
 
-const categoryObj = categories.find(c => c.id === category);
-const categoryLabel = categoryObj ? categoryObj.label : category;
+  const categoryObj = categories.find(c => c.id === category);
+  const categoryLabel = categoryObj ? categoryObj.label : category;
 
-return (
+  return (
     <div className="p-10 space-y-4 max-w-full justify-center">
       <Header />
 

@@ -1,4 +1,3 @@
-// 
 import React, { useState } from 'react';
 
 const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
@@ -15,13 +14,15 @@ export default function MenuCalendar({ menuItems, startDay = 0, daysInMonth = 31
     return menuItems[menuIndex];
   }
 
-  function getDateForCell(cellIndex) {
-    const menuIndex = cellIndex - startIndex;
-    if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
+function getDateForCell(cellIndex) {
+  const menuIndex = cellIndex - startIndex;
+  if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
 
-    const dateStr = menuItems[menuIndex].date;
-    return Number(dateStr.slice(-2)); // last 2 digits without 0
-  }
+  const menuItem = menuItems[menuIndex];
+  if (!menuItem || !menuItem.date) return null;
+
+  return Number(menuItem.date.slice(-2)); // last 2 digits without 0
+}
 
   const handleClick = (cellIndex) => {
     setSelectedDay(cellIndex);
