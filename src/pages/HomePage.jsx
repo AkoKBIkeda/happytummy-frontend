@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CategoryButtons from '../components/CategoryButtons';
 import Header from '../components/Header';
+import axios from "axios";
+import { baseUrl } from "../constants";
 
 const categories = [
   { id: 'standard', label: 'Standard' },
@@ -17,7 +19,22 @@ export default function HomePage() {
 
   const handleSelect = (cat) => {
     setSelectedCategory(cat.id);
-    navigate(`/menu/${cat.id}`);
+    let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: baseUrl + "api/monthly-menu/?dietary="+cat.label,
+        headers: {},
+      };
+  
+      axios
+        .request(config)
+        .then((response) => {        
+          navigate(`/menu/${cat.id}`, { state: { menuData: response.data } });
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   return (
