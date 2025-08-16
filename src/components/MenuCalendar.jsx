@@ -76,14 +76,14 @@ export default function MenuCalendar({ menuItems, startDay = 0, daysInMonth = 31
       </div>
       {/* Mobile stacked list view - shown only on small screens */}
       <div className="sm:hidden flex flex-col gap-4">
-        {menuItems.map((menu, index) => (
+        {Array.isArray(menuItems) && menuItems.map((menu, index) => (
           <div
             key={index}
             className="border border-gray-300 p-4 rounded cursor-pointer bg-white hover:bg-[#e1e9fd]"
             onClick={() => menu && onMenuItemClick && onMenuItemClick(menu.mealId)}
           >
             <div className="text-sm font-semibold text-gray-400 mb-2">
-              {Number(menu.date.slice(-2))}
+              {menu?.date ? Number(menu.date.slice(-2)) : ""}
             </div>
             <div className="text-lg font-semibold">{menu.menuName}</div>
           </div>
