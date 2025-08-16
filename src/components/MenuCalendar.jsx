@@ -10,19 +10,19 @@ export default function MenuCalendar({ menuItems, startDay = 0, daysInMonth = 31
   const startIndex = [0, 1, 6].includes(startDay) ? 0 : startDay - 1;
 
   function getMenuForCell(cellIndex) {
+    if (!Array.isArray(menuItems)) return null;
     const menuIndex = cellIndex - startIndex;
     if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
     return menuItems[menuIndex];
   }
 
   function getDateForCell(cellIndex) {
+    if (!Array.isArray(menuItems)) return null;
     const menuIndex = cellIndex - startIndex;
-    if (!Array.isArray(menuItems) || menuIndex < 0 || menuIndex >= menuItems.length) return null;
+    if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
 
-    // if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
-
-    const dateStr = menuItems[menuIndex].date;
-    return Number(dateStr.slice(-2)); // last 2 digits without 0
+    const dateStr = menuItems[menuIndex]?.date;
+    return dateStr ? Number(dateStr.slice(-2)) : null;
   }
 
   const handleClick = (cellIndex) => {
