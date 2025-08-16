@@ -24,9 +24,25 @@ export default function MenuPage({ menu }) {
   const [loadingDetails, setLoadingDetails] = useState(false);
 
   useEffect(() => {
-    if (state?.menuData) setMenuData(state.menuData);
-    setLoading(!state?.menuData);
+    console.log("MenuPage state:", state);
+    if (state?.menuData) {
+      setMenuData(state.menuData);
+      setLoading(false);
+    } else {
+      // Fallback fetch if user navigated directly
+      axios
+        .get(`${baseUrl}/api/menus/${category}`)
+        .then((res) => {
+          setMenuData(res.data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch menu:", err);
+          setLoading(false);
+        });
+    }
   }, [category, state]);
+
 
   // Handler called when user clicks on a menu item in the calendar
   const handleMenuItemClick = (mealId) => {
@@ -59,7 +75,10 @@ export default function MenuPage({ menu }) {
   };
 
   if (loading) return <div>Loading menu...</div>;
-  if (!menuData) return <div>No menu data available.</div>;
+  if (!menuData?.menuItems || !Array.isArray(menuData.menuItems)) {
+    return <div>No valid menu data received.</div>;
+  }
+
 
   function getMonthYearFromMenuItems(menuItems) {
     if (!menuItems || menuItems.length === 0) return { month: "", year: "" };
@@ -112,13 +131,18 @@ export default function MenuPage({ menu }) {
       </div>
 
       {/* Calendar */}
-      <MenuCalendar
-        category={category}
-        menuItems={menuData.menuItems}
-        startDay={menuData.startDay}
-        daysInMonth={menuData.daysInMonth}
-        onMenuItemClick={handleMenuItemClick}
-      />
+      {Array.isArray(menuData?.menuItems) && menuData.menuItems.length > 0 ? (
+        <MenuCalendar
+          category={category}
+          menuItems={menuData.menuItems}
+          startDay={menuData.startDay}
+          daysInMonth={menuData.daysInMonth}
+          onMenuItemClick={handleMenuItemClick}
+        />
+      ) : (
+        <div className="text-center text-gray-500">No menu data available</div>
+      )}
+
 
       {/* Details popup */}
       {selectedMenuDetails && (
