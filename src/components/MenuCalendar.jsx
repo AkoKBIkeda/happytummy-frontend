@@ -17,7 +17,9 @@ export default function MenuCalendar({ menuItems, startDay = 0, daysInMonth = 31
 
   function getDateForCell(cellIndex) {
     const menuIndex = cellIndex - startIndex;
-    if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
+    if (!Array.isArray(menuItems) || menuIndex < 0 || menuIndex >= menuItems.length) return null;
+
+    // if (menuIndex < 0 || menuIndex >= menuItems.length) return null;
 
     const dateStr = menuItems[menuIndex].date;
     return Number(dateStr.slice(-2)); // last 2 digits without 0
