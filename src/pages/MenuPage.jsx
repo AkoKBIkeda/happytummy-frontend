@@ -31,7 +31,7 @@ export default function MenuPage({ menu }) {
     } else {
       // Fallback fetch if user navigated directly
       axios
-        .get(`${baseUrl}/api/menus/${category}`)
+        .get(`${baseUrl}api/menus/${category}`)
         .then((res) => {
           setMenuData(res.data);
           setLoading(false);
@@ -52,7 +52,7 @@ export default function MenuPage({ menu }) {
       let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url: baseUrl + "/api/meals/" + mealId,
+        url: baseUrl + "api/meals/" + mealId,
         headers: {},
       };
 
