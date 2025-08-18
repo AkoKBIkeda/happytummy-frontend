@@ -13,21 +13,24 @@ export default function MenuDetails({ menu, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50">
-      <div className="bg-white p-5 rounded-lg shadow-lg max-w-md w-full relative">
-        {/* Close button */}
-        <button
-          className="absolute top-3 right-3 text-gray-600 hover:text-gray-900 text-lg"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          ✕
-        </button>
-
+        <div className="relative max-w-md w-full">
+            {/* Top coloured bar */}
+            <div className="bg-[#90a9eb] w-full h-12 rounded-t-lg flex justify-end items-center px-3">
+            <button
+                className="text-gray-600 hover:text-gray-900 text-lg"
+                onClick={onClose}
+                aria-label="Close"
+            >
+                ✕
+            </button>
+        </div>
+      <div className="bg-white p-5 shadow-lg max-w-md w-full relative">
+        
         {/* Menu Name */}
         <h3 className="text-xl font-bold mb-4">{menu.name}</h3>
 
         {/* Menu Description */}
-         <div className="mb-4">
+        <div className="mb-4">
             <h4 className="font-semibold mb-1">Description</h4>
             <p className="text-sm text-gray-700 leading-relaxed">{menu.description}</p>
         </div>
@@ -106,6 +109,7 @@ export default function MenuDetails({ menu, onClose }) {
             </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
