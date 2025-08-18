@@ -3,6 +3,13 @@ import { CircleAlert, CheckSquare, Shuffle } from 'lucide-react';
 
 export default function MenuDetails({ menu, onClose }) {
   if (!menu) return null;
+  console.log("MenuDetails menu:", menu);
+
+  // Helper function for Allergens
+  function capitalizeFirst(str) {
+    if (!str) return "";
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center p-4 z-50">
@@ -26,44 +33,55 @@ export default function MenuDetails({ menu, onClose }) {
         </div>
         
         {/* Ingredients */}
-        {menu.ingredients && menu.ingredients.length > 0 && (
+        {menu.ingredient_names && menu.ingredient_names.length > 0 && (
         <div className="mb-4">
             <h4 className="font-semibold mb-1">Ingredients</h4>
             <p className="text-sm text-gray-700 leading-relaxed">
-            {menu.ingredients.join(', ')}
+            {menu.ingredient_names.join(', ')}
             </p>
         </div>
         )}
 
         {/* Nutrition Breakdown */}
-        {menu.nutrition && (
-            <div className="mb-4">
-                <h4 className="font-semibold mb-1">Nutrition Breakdown</h4>
-                <div className="text-sm text-gray-700">
-                    {Object.entries(menu.nutrition).map(([key, value], idx) => (
-                        <div
-                            key={idx}
-                            className="flex py-1"
-                        >
-                        <span className="w-1/2 text-left capitalize">{key}</span>
-                        <span className="w-1/2 text-left">~{value}</span>
-                        </div>
-                    ))}
+        <div className="mb-4">
+            <h4 className="font-semibold mb-1">Nutrition Breakdown</h4>
+            <div className="text-sm text-gray-700">
+                <div className="flex py-1">
+                    <span className="w-1/2 text-left">Energy</span>
+                    <span className="w-1/2 text-left">~{Math.round(menu.total_energy_kj)} kcal</span>
+                </div>
+                <div className="flex py-1">
+                    <span className="w-1/2 text-left">Protein</span>
+                    <span className="w-1/2 text-left">~{menu.total_protein.toFixed(1)} g</span>
+                </div>
+                <div className="flex py-1">
+                    <span className="w-1/2 text-left">Fat</span>
+                    <span className="w-1/2 text-left">~{menu.total_fat.toFixed(1)} g</span>
+                </div>
+                <div className="flex py-1">
+                    <span className="w-1/2 text-left">Carbohydrates</span>
+                    <span className="w-1/2 text-left">~{menu.total_carbs.toFixed(1)} g</span>
+                </div>
+                <div className="flex py-1">
+                    <span className="w-1/2 text-left">Fibre</span>
+                    <span className="w-1/2 text-left">~{menu.total_fiber.toFixed(1)} g</span>
                 </div>
             </div>
-        )}
-
+        </div>
+        
 
         {/* Allergens */}
         {menu.allergens && menu.allergens.length > 0 && (
             <div className="mb-4 text-red-600">
-                <div className="flex items-center mb-1">
+            <div className="flex items-center mb-1">
                 <CircleAlert size={16} className="mr-2" />
                 <h4 className="font-bold text-red-600">Allergens</h4>
-                </div>
-                <p className="text-sm">May contain {menu.allergens.join(', ')}</p>
             </div>
-            )}
+            <p className="text-sm">
+                May contain {menu.allergens.map(a => capitalizeFirst(a)).join(', ')}
+            </p>
+            </div>
+        )}
 
         <div className="flex justify-center items-center gap-4 mt-10 mb-5">
             <button
