@@ -81,7 +81,7 @@ export default function MenuDetails({ menu, onClose }) {
                 <h4 className="font-bold text-red-600">Allergens</h4>
             </div>
             <p className="text-sm">
-                May contain {menu.allergens.map(a => capitalizeFirst(a)).join(', ')}
+                Contains {menu.allergens.map(a => capitalizeFirst(a)).join(', ')}
             </p>
             </div>
         )}
